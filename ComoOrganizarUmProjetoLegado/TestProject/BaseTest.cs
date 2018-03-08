@@ -4,6 +4,7 @@ using SimpleInjector;
 using SimpleInjector.Lifestyles;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Core.EntityClient;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace TestProject
 {
 	public class BaseTest
-	{				
+	{
 		private EntityConnection connection;
 		private CoreEntities context;
 		public Container container;
@@ -35,7 +36,8 @@ namespace TestProject
 		public void ClearTest()
 		{
 			Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-			connection = Effort.EntityConnectionFactory.CreateTransient("CoreEntities");
+			var Connection = ConfigurationManager.ConnectionStrings["CoreEntities"];
+			connection = Effort.EntityConnectionFactory.CreateTransient(Connection.ConnectionString);
 			context = new CoreEntities(connection);
 			InitializeSeed();
 		}

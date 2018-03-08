@@ -18,11 +18,11 @@ namespace TestProject
 
 			var exception = Assert.ThrowsException<CoreValidationException>(() =>
 						{
-							repository.Add(new Core.Models.Contato { Nome = "bunda de véia" });
+							repository.Add(new Core.Models.Contato { Nome = "nome ilegal" });
 
 							repository.Save();
 						});
-			
+
 
 
 

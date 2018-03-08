@@ -13,10 +13,17 @@ namespace Core.Repository
 	public class ContatosRepository : BaseRepository<CoreEntities, Contato>, IContatosRepository
 	{
 		public ContatosRepository()
-			: base(new AlunoValidator()) { }
+			: base(new ContatoValidator()) { }
 
 		public ContatosRepository(CoreEntities context)
-			: base(context, new AlunoValidator()) { }
+			: base(context, new ContatoValidator()) { }
 	}
-	public class AlunoValidator : AbstractValidator<Contato> { }
+	public class ContatoValidator : AbstractValidator<Contato>
+	{
+
+		public ContatoValidator()
+		{
+			RuleFor(c => c.Nome).Must(c => !c.Contains("ilegal")).WithMessage("Nome ilegal");
+		}
+	}
 }
