@@ -6,7 +6,9 @@ using System.Data.Entity;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,13 +34,24 @@ namespace Core.Models
 			var builder = new EntityConnectionStringBuilder(ConfigurationManager.ConnectionStrings["CoreEntities"].ConnectionString);
 			builder.Provider = "System.Data.SqlClient";
 
-			///caso precise customizar a conexão, aqui é o lugar ideal
-			///
+
+
+			//// como estou usando um MDF é necessário pegar o relative path.
+			/// eu não queria utilizar sql express
+			if (builder.ToString().Contains("##Path##"))
+			{
+				string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+				UriBuilder uri = new UriBuilder(codeBase);
+				string path = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
+
+
+				return new EntityConnection(builder.ToString().Replace("##Path##", path));
+			}
+			//////////////////////////////////////////////////////////////////////
 			return new EntityConnection(builder.ToString());
 		}
 		private static EntityConnection CreateConnection(string connectionString, EntityConnection conn)
 		{
-			///caso precise customizar a conexão, aqui é o lugar ideal
 			return conn;
 		}
 
